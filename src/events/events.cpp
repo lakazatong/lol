@@ -38,6 +38,9 @@ Event deal_magic_damage(Agent &source, Agent &target, float damage) {
             auto &source = dynamic_cast<Champion &>(ctx.source);
             auto &target = dynamic_cast<Champion &>(*ctx.targets[0]);
 
+            if (!target.alive)
+                return;
+
             target.health -= damage;
 
             if (source.inventory.has(ItemId::Morellonomicon))
@@ -48,6 +51,9 @@ Event deal_magic_damage(Agent &source, Agent &target, float damage) {
 Event heal(Agent &source, Agent &target, float amount) {
     return {Id::Heal, &source, {&target}, [amount](EventContext &ctx) {
                 auto &target = dynamic_cast<Champion &>(*ctx.targets[0]);
+
+                if (!target.alive)
+                    return;
 
                 float multiplier = 1.0f;
 
